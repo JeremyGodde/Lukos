@@ -1,5 +1,9 @@
 ![Qt 5.15](https://raw.githubusercontent.com/JeremyGodde/Lukos/18f2d0262fd0e98a3a7e3145ea6acde0345b7345/ressources/Qt%205.15.svg)
+![C++11](https://raw.githubusercontent.com/JeremyGodde/Lukos/aad9cebc22c92de70795803e0385308529e2836c/ressources/C%2B%2B%2011.svg)
+
 # Lukos
+
+![Logotype](https://raw.githubusercontent.com/JeremyGodde/Lukos/master/ressources/logo.ico)
 Lukos Budgeting Application
 Copyright (c) 2020 • Jérémy Godde
 
