@@ -4,6 +4,8 @@
 # Lukos
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/c4513632976540d08d71227e079a7c13)](https://app.codacy.com/manual/JeremyGodde/Lukos?utm_source=github.com&utm_medium=referral&utm_content=JeremyGodde/Lukos&utm_campaign=Badge_Grade_Settings)
+![Qt 5.15](https://raw.githubusercontent.com/JeremyGodde/Lukos/18f2d0262fd0e98a3a7e3145ea6acde0345b7345/ressources/Qt%205.15.svg)
+![C++11](https://raw.githubusercontent.com/JeremyGodde/Lukos/aad9cebc22c92de70795803e0385308529e2836c/ressources/C%2B%2B%2011.svg)
 
 ![Logotype](https://raw.githubusercontent.com/JeremyGodde/Lukos/master/ressources/logo.ico)
 Lukos Budgeting Application
