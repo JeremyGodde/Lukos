@@ -3,6 +3,8 @@
 
 # Lukos
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/c4513632976540d08d71227e079a7c13)](https://app.codacy.com/manual/JeremyGodde/Lukos?utm_source=github.com&utm_medium=referral&utm_content=JeremyGodde/Lukos&utm_campaign=Badge_Grade_Settings)
+
 ![Logotype](https://raw.githubusercontent.com/JeremyGodde/Lukos/master/ressources/logo.ico)
 Lukos Budgeting Application
 Copyright (c) 2020 • Jérémy Godde
