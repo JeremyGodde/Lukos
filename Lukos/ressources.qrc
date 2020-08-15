@@ -1,0 +1,9 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+    <file>../ressources/gear.png</file>
+    <file>../ressources/loup.svg</file>
+    <file>../ressources/logo.ico</file>
+    <file>../ressources/budget.svg</file>
+    <file>../ressources/enregistrer.png</file>
+</qresource>
+</RCC>
