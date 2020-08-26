@@ -10,9 +10,9 @@ Copyright (c) 2020 • Jérémy Godde
 
 ## Aide
 
-Pour installer l'application : [https://github.com/JeremyGodde/Lukos/wiki/Installation](Aide à l'installation)
+Pour installer l'application : [Aide à l'installation](https://github.com/JeremyGodde/Lukos/wiki/Installation)
 
-Pour toute aide : [https://github.com/JeremyGodde/Lukos/wiki/Aide](le Wiki)
+Pour toute aide : [le Wiki](https://github.com/JeremyGodde/Lukos/wiki/Aide)
 
 ## Liste des versions
 
