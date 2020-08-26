@@ -8,7 +8,13 @@
 Lukos Budgeting Application
 Copyright (c) 2020 • Jérémy Godde
 
-### Liste des versions
+## Aide
+
+Pour installer l'application : [https://github.com/JeremyGodde/Lukos/wiki/Installation](Aide à l'installation)
+
+Pour toute aide : [https://github.com/JeremyGodde/Lukos/wiki/Aide](le Wiki)
+
+## Liste des versions
 
   - Abricot 0.X
       - 0.1 version non-déployable de développement
