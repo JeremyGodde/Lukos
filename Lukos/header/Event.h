@@ -1,20 +1,18 @@
-/* =======================================================================
-    Lukos Budgeting Application
-    Copyright (C) 2020 Jérémy Godde
+/**
+    @copyright Lukos Budgeting Application copyright © 2020 Jérémy Godde
 
+    @par License :
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
-
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
-
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
-======================================================================= */
+*/
 
 #ifndef EVENT_H
 #define EVENT_H
@@ -37,15 +35,32 @@
 
 class Frequency
 {
+public:
+    enum Rythm {
+      WEEKLY,
+      MONTHLY,
+      YEARLY,
+    };
+
 protected:
-    unsigned nb_week; //!< nombre de semaines de fréquence
-    unsigned nb_month; //!< nombre de mois de fréquence
-    unsigned nb_year; //!< nombre d'années de fréquence
+    unsigned frequency; //!< valeur de fréquence
+    Rythm rythm; //!< rythme de la fréquence
 
 public:
-    explicit Frequency(unsigned _nb_week,
-                       unsigned _nb_month,
-                       unsigned _nb_year); //!< constructeur
+    explicit Frequency(Rythm _rythm,
+                       unsigned _frequency); //!< constructeur
+
+    /**
+     * @fn Rythm Frequency::getRythm() const
+     * @return le rythme de la fréquence
+     */
+    Rythm getRythm() const;
+
+    /**
+     * @fn unsigned Frequency::getFrequency() const
+     * @return la fréquence
+     */
+    unsigned getFrequency() const;
 
     /**
      * @fn unsigned Frequency::getNbWeek() const
@@ -372,6 +387,12 @@ public:
      * @return la date au format indiqué
      */
     QString const toString(QString const _format = "dd mmmm yyyy") const;
+
+    /**
+     * @fn QDate const Date::toQDate() const
+     * @return l'objet QDate correspondant à la date
+     */
+    QDate const toQDate() const;
 
     /**
      * @fn bool Date::operator<(Date const& _date) const

@@ -1,67 +1,66 @@
-/* =======================================================================
-    Lukos Budgeting Application
-    Copyright (C) 2020 Jérémy Godde
+/**
+    @copyright Lukos Budgeting Application copyright © 2020 Jérémy Godde
 
+    @par License :
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
-
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
-
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
-======================================================================= */
+*/
 
 #include "../header/Event.h"
 
-Frequency::Frequency(unsigned _nb_week,
-                   unsigned _nb_month,
-                   unsigned _nb_year)
-    : nb_week(_nb_week),
-      nb_month(_nb_month),
-      nb_year(_nb_year)
+Frequency::Frequency(Rythm _rythm,
+                     unsigned _frequency)
+    : frequency(_frequency),
+      rythm(_rythm)
 {
 
+}
+
+Frequency::Rythm Frequency::getRythm() const
+{
+    return rythm;
+}
+
+unsigned Frequency::getFrequency() const
+{
+    return frequency;
 }
 
 unsigned Frequency::getNbWeek() const
 {
-    return nb_week;
+    return (rythm == WEEKLY) ? frequency : 0;
 }
 
 unsigned Frequency::getNbMonth() const
 {
-    return nb_month;
+    return (rythm == MONTHLY) ? frequency : 0;
 }
 
 unsigned Frequency::getNbYear() const
 {
-    return nb_year;
+    return (rythm == YEARLY) ? frequency : 0;
 }
 
 QString const Frequency::toString() const
 {
-    return QString::number(nb_week) + " " + QString::number(nb_month) + " " + QString::number(nb_year);
-}
-
-
-Frequency Frequency::operator*(unsigned const& _factor) const
-{
-    return Frequency(_factor * nb_week,
-                     _factor * nb_month,
-                     _factor * nb_year);
+    return QString::number(getNbWeek()) + " " + QString::number(getNbMonth()) + " " + QString::number(getNbYear());
 }
 
 Frequency* Frequency::fromString(QString _text)
 {
     unsigned __i = 0;
     int __j = 0;
-    unsigned __w, __m, __y;
-    for(;__i < 3 && __j<_text.size(); __i++)
+    unsigned __f = 0;
+    Rythm __r = YEARLY;
+    for(;__i < 3 && __j<_text.size() && __f == 0; __i++)
     {
         QString __s = "";
         for(;__j<_text.size() && _text[__j]!=' ';__j++)
@@ -69,15 +68,21 @@ Frequency* Frequency::fromString(QString _text)
             __s += _text[__j];
         }
         __j++;
+        __f = __s.toInt();
 
-        if(__i == 0){__w = __s.toInt();}
-        else if(__i == 1){__m = __s.toInt();}
-        else if(__i == 2){__y = __s.toInt();}
+        if(__f > 0){
+            if(__i == 0){__r = WEEKLY;}
+            else if(__i == 1){__r = MONTHLY;}
+        }
     }
 
-    return new Frequency(__w,__m,__y);
+    return new Frequency(__r,__f);
 }
 
+Frequency Frequency::operator*(unsigned const& _factor) const
+{
+    return Frequency(rythm,_factor * frequency);
+}
 
 QString const operator<<(QString const& _s, Frequency const& _f)
 {
@@ -133,15 +138,15 @@ bool Date::operator<(Date const* _date) const
 
 Date Date::operator+(Frequency const& _frequency) const
 {
-    if(_frequency.getNbYear() > 0)
+    if(_frequency.getRythm() == Frequency::YEARLY)
     {
-        unsigned __year = year + _frequency.getNbYear();
+        unsigned __year = year + _frequency.getFrequency();
         return Date(day,month,__year);
     }
 
-    if(_frequency.getNbMonth() > 0)
+    else if(_frequency.getRythm() == Frequency::MONTHLY)
     {
-        unsigned __month = month + _frequency.getNbMonth(),
+        unsigned __month = month + _frequency.getFrequency(),
                  __year = year,
                 __day = day;
 
@@ -167,11 +172,11 @@ Date Date::operator+(Frequency const& _frequency) const
         return Date(Day(__day),Month(__month),__year);
     }
 
-    if(_frequency.getNbWeek() > 0)
+    else if(_frequency.getRythm() == Frequency::WEEKLY)
     {
         unsigned __month = month,
                  __year = year,
-                __day = day + 7 * _frequency.getNbWeek();
+                __day = day + 7 * _frequency.getFrequency();
 
         unsigned __lim;
         do
@@ -206,17 +211,17 @@ Date Date::operator+(Frequency const& _frequency) const
 
 Date Date::operator-(Frequency const& _frequency) const
 {
-    if(_frequency.getNbYear() > 0)
+    if(_frequency.getRythm() == Frequency::YEARLY)
     {
-        unsigned __year = year - _frequency.getNbYear();
-        return Date(day,month,__year);
+        int __year = year - _frequency.getFrequency();
+        return Date(day,month,Year(__year));
     }
 
-    if(_frequency.getNbMonth() > 0)
+    else if(_frequency.getRythm() == Frequency::MONTHLY)
     {
-        unsigned __month = month - _frequency.getNbMonth(),
-                 __year = year,
-                __day = day;
+        int __month = month - _frequency.getFrequency(),
+            __year = year;
+        unsigned __day = day;
 
         while(__month <= 0)
         {
@@ -237,14 +242,14 @@ Date Date::operator-(Frequency const& _frequency) const
             __day = __lim;
         }
 
-        return Date(Day(__day),Month(__month),__year);
+        return Date(Day(__day),Month(__month),Year(__year));
     }
 
-    if(_frequency.getNbWeek() > 0)
+    else if(_frequency.getRythm() == Frequency::WEEKLY)
     {
         int __month = month,
             __year = year,
-            __day = day - 7 * _frequency.getNbWeek();
+            __day = day - 7 * _frequency.getFrequency();
 
         unsigned __lim;
         do
@@ -272,7 +277,7 @@ Date Date::operator-(Frequency const& _frequency) const
 
         }while(0 >= __day);
 
-        return Date(Day(__day),Month(__month),unsigned(__year));
+        return Date(Day(__day),Month(__month),Year(__year));
     }
 
     return *this;
@@ -324,16 +329,61 @@ QString const Date::toString(QString const _format) const
           break;
         }
     }
+    else if(_format.contains("mmm"))
+    {
+        switch (month) {
+        case january:
+          __month = "jan.";
+          break;
+        case february:
+          __month = "fév.";
+          break;
+        case march:
+          __month = "mars";
+          break;
+        case april:
+          __month = "avr.";
+          break;
+        case may:
+          __month = "mai";
+          break;
+        case june:
+          __month = "juin";
+          break;
+        case july:
+          __month = "jul.";
+          break;
+        case august:
+          __month = "août";
+          break;
+        case september:
+          __month = "sep.";
+          break;
+        case october:
+          __month = "oct.";
+          break;
+        case november:
+          __month = "nov.";
+          break;
+        case december:
+          __month = "déc.";
+          break;
+        }
+    }
     else
     {
         __month = QString::number(month);
         if(month < 10) __month = "0" + __month;
         if(day < 10) __date = "0" + __date;
+
+        if(_format == "dd/mm/yyyy") __date += "/" + __month + "/" + QString::number(year);
+        else if(_format == "yyyy/mm/dd") __date = QString::number(year) + "/" + __month + "/" + __date;
+        else if(_format == "mm/dd/yyyy") __date = __month + "/" + __date + "/" + QString::number(year);
+
+        return __date;
     }
 
-    if(_format == "dd/mm/yyyy") __date += "/" + __month + "/" + QString::number(year);
-    else if(_format == "yyyy/mm/dd") __date = QString::number(year) + "/" + __month + "/" + __date;
-    else __date += " " + __month + " " + QString::number(year);
+    __date += " " + __month + " " + QString::number(year);
 
     return __date;
 }
@@ -373,6 +423,13 @@ Date* Date::fromString(QString _text)
     }
 
     return new Date(__d,__m,__y);
+}
+
+QDate const Date::toQDate() const
+{
+    QDate __qdate;
+    __qdate.setDate(year,month,day);
+    return __qdate;
 }
 
 QString const operator<<(QString const& _s, Date const& _d)

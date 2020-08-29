@@ -8,7 +8,7 @@ TARGET = "Lukos"
 
 TEMPLATE = app
 RC_ICONS = ../ressources/logo.ico
-VERSION = 0.2
+VERSION = 0.2.2
 QMAKE_TARGET_DESCRIPTION = "Lukos Bugeting Application"
 QMAKE_TARGET_COMPANY = "Jeremy Godde"
 QMAKE_TARGET_COPYRIGHT = "GNU GPL 3"

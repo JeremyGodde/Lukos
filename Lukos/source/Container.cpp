@@ -1,20 +1,18 @@
-/* =======================================================================
-    Lukos Budgeting Application
-    Copyright (C) 2020 Jérémy Godde
+/**
+    @copyright Lukos Budgeting Application copyright © 2020 Jérémy Godde
 
+    @par License :
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
-
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
-
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
-======================================================================= */
+*/
 
 #include "../header/Calendar.h"
 
@@ -137,6 +135,13 @@ T Container<T>::operator[](unsigned _position)
     return array_elements[_position];
 }
 
+template <typename T>
+T Container<T>::operator[](unsigned _position) const
+{
+    if(_position >= size)
+        throw Exception("Débordement d'éléments de container");
+    return array_elements[_position];
+}
 
 
 template <typename T>
@@ -183,6 +188,7 @@ template void Container<Operation*>::remove(unsigned _position);
 template void Container<Operation*>::remove(Operation* _element);
 template void Container<Operation*>::insert(Operation* _element);
 template Operation* Container<Operation*>::operator[](unsigned _position);
+template Operation* Container<Operation*>::operator[](unsigned _position) const;
 template Container<Operation*>::Iterator::Iterator(Container<Operation*>& _container, unsigned _position);
 template bool Container<Operation*>::Iterator::isTerminated() const;
 template Container<Operation*>::Iterator& Container<Operation*>::Iterator::operator++(int);
@@ -196,6 +202,7 @@ template void Container<Budget*>::remove(unsigned _position);
 template void Container<Budget*>::remove(Budget* _element);
 template void Container<Budget*>::insert(Budget* _element);
 template Budget* Container<Budget*>::operator[](unsigned _position);
+template Budget* Container<Budget*>::operator[](unsigned _position) const;
 template Container<Budget*>::Iterator::Iterator(Container<Budget*>& _container, unsigned _position);
 template bool Container<Budget*>::Iterator::isTerminated() const;
 template Container<Budget*>::Iterator& Container<Budget*>::Iterator::operator++(int);
@@ -209,6 +216,7 @@ template void Container<BudgetCategory*>::remove(unsigned _position);
 template void Container<BudgetCategory*>::remove(BudgetCategory* _element);
 template void Container<BudgetCategory*>::insert(BudgetCategory* _element);
 template BudgetCategory* Container<BudgetCategory*>::operator[](unsigned _position);
+template BudgetCategory* Container<BudgetCategory*>::operator[](unsigned _position) const;
 template Container<BudgetCategory*>::Iterator::Iterator(Container<BudgetCategory*>& _container, unsigned _position);
 template bool Container<BudgetCategory*>::Iterator::isTerminated() const;
 template Container<BudgetCategory*>::Iterator& Container<BudgetCategory*>::Iterator::operator++(int);

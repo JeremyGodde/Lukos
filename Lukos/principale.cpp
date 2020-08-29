@@ -1,20 +1,18 @@
-/* =======================================================================
-    Lukos Budgeting Application
-    Copyright (C) 2020 Jérémy Godde
+/**
+    @copyright Lukos Budgeting Application copyright © 2020 Jérémy Godde
 
+    @par License :
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
-
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
-
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
-======================================================================= */
+*/
 
 #include "principale.h"
 #include "ui_principale.h"
@@ -44,7 +42,9 @@ Principale::Principale(Parameters& _parameters, QMainWindow *parent)
 
     //Insertion de la date courante
     ui->editDate->setDate(QDate::currentDate());
+    ui->editDateMod->setDate(QDate::currentDate());
     ui->editBudgetDate->setDate(QDate::currentDate());
+    ui->editBudgetDateMod->setDate(QDate::currentDate());
 
     //Chargement de sauvegarde
     QFile fichier(parameters.getFileSave());
@@ -81,11 +81,23 @@ Principale::Principale(Parameters& _parameters, QMainWindow *parent)
         ui->tableauOperations->horizontalHeaderItem(5)->setText("Crédit "+parameters.getDevise());
         ui->tableauOperations->horizontalHeaderItem(6)->setText("Solde "+parameters.getDevise());
     ui->checkParDevise->setChecked(parameters.getDeviseVisible());
-    ui->radioParFormatDate1->setChecked(true);                      // paramètre à ajouter
-    ui->radioParFormatDate2->setChecked(false);                     // paramètre à ajouter
-    ui->radioParFormatDate3->setChecked(false);                     // paramètre à ajouter
-    ui->radioParFormatDate4->setChecked(false);                     // paramètre à ajouter
-    ui->radioParFormatDate5->setChecked(false);                     // paramètre à ajouter
+    QString const __format_date = parameters.getFormatDate();
+    if(__format_date == "dd mmmm yyyy"){
+        ui->radioParFormatDate1->setChecked(true);
+    }
+    else if(__format_date == "dd mmm yyyy"){
+        ui->radioParFormatDate2->setChecked(true);
+    }
+    else if(__format_date == "dd/mm/yyyy"){
+        ui->radioParFormatDate3->setChecked(true);
+    }
+    else if(__format_date == "mm/dd/yyyy"){
+        ui->radioParFormatDate4->setChecked(true);
+    }
+    else if(__format_date == "yyyy/mm/dd"){
+        ui->radioParFormatDate5->setChecked(true);
+    }
+
     ui->spinParMaxPoints->setValue(parameters.getGraphicsMaxPoints());
     ui->lineParSave->setText(parameters.getFileSave());
     ui->lineParArchive->setText(parameters.getDirRegistry());
@@ -96,20 +108,20 @@ Principale::Principale(Parameters& _parameters, QMainWindow *parent)
 
     //Réglage des valeurs de fréquences
     ui->comboBudgetFrequence->setItemData(1,QVariant::fromValue<Frequency*>(nullptr));
-    ui->comboBudgetFrequence->setItemData(1,QVariant::fromValue<Frequency*>(new Frequency(0,0,1)));
-    ui->comboBudgetFrequence->setItemData(2,QVariant::fromValue<Frequency*>(new Frequency(0,6,0)));
-    ui->comboBudgetFrequence->setItemData(3,QVariant::fromValue<Frequency*>(new Frequency(0,3,0)));
-    ui->comboBudgetFrequence->setItemData(4,QVariant::fromValue<Frequency*>(new Frequency(0,2,0)));
-    ui->comboBudgetFrequence->setItemData(5,QVariant::fromValue<Frequency*>(new Frequency(0,1,0)));
-    ui->comboBudgetFrequence->setItemData(6,QVariant::fromValue<Frequency*>(new Frequency(2,0,0)));
-    ui->comboBudgetFrequence->setItemData(7,QVariant::fromValue<Frequency*>(new Frequency(1,0,0)));
+    ui->comboBudgetFrequence->setItemData(1,QVariant::fromValue<Frequency*>(new Frequency(Frequency::YEARLY,1)));
+    ui->comboBudgetFrequence->setItemData(2,QVariant::fromValue<Frequency*>(new Frequency(Frequency::MONTHLY,6)));
+    ui->comboBudgetFrequence->setItemData(3,QVariant::fromValue<Frequency*>(new Frequency(Frequency::MONTHLY,3)));
+    ui->comboBudgetFrequence->setItemData(4,QVariant::fromValue<Frequency*>(new Frequency(Frequency::MONTHLY,2)));
+    ui->comboBudgetFrequence->setItemData(5,QVariant::fromValue<Frequency*>(new Frequency(Frequency::MONTHLY,1)));
+    ui->comboBudgetFrequence->setItemData(6,QVariant::fromValue<Frequency*>(new Frequency(Frequency::WEEKLY,2)));
+    ui->comboBudgetFrequence->setItemData(7,QVariant::fromValue<Frequency*>(new Frequency(Frequency::WEEKLY,1)));
 
-    ui->comboPeriode->setItemData(0,QVariant::fromValue<Frequency*>(new Frequency(0,0,100)));
-    ui->comboPeriode->setItemData(1,QVariant::fromValue<Frequency*>(new Frequency(1,0,0)));
-    ui->comboPeriode->setItemData(2,QVariant::fromValue<Frequency*>(new Frequency(0,1,0)));
-    ui->comboPeriode->setItemData(3,QVariant::fromValue<Frequency*>(new Frequency(0,3,0)));
-    ui->comboPeriode->setItemData(4,QVariant::fromValue<Frequency*>(new Frequency(0,6,0)));
-    ui->comboPeriode->setItemData(5,QVariant::fromValue<Frequency*>(new Frequency(0,0,1)));
+    ui->comboPeriode->setItemData(0,QVariant::fromValue<Frequency*>(new Frequency(Frequency::YEARLY,100)));
+    ui->comboPeriode->setItemData(1,QVariant::fromValue<Frequency*>(new Frequency(Frequency::WEEKLY,1)));
+    ui->comboPeriode->setItemData(2,QVariant::fromValue<Frequency*>(new Frequency(Frequency::MONTHLY,1)));
+    ui->comboPeriode->setItemData(3,QVariant::fromValue<Frequency*>(new Frequency(Frequency::MONTHLY,3)));
+    ui->comboPeriode->setItemData(4,QVariant::fromValue<Frequency*>(new Frequency(Frequency::MONTHLY,6)));
+    ui->comboPeriode->setItemData(5,QVariant::fromValue<Frequency*>(new Frequency(Frequency::YEARLY,1)));
 
     //Rafraîchissements et réglage des recherches
     ui->comboNumeroRecherche->addItem("");
@@ -123,20 +135,31 @@ Principale::Principale(Parameters& _parameters, QMainWindow *parent)
     }
 
     //Connectique :
-    // * Opérations
+        // * Opérations
     connect(ui->editIntitule,SIGNAL(textChanged(QString)),this,SLOT(activeVerification()));
     connect(ui->editNumero,SIGNAL(textChanged(QString)),this,SLOT(activeVerification()));
     connect(ui->editMontant,SIGNAL(valueChanged(double)),this,SLOT(activeVerification()));
     connect(ui->boutonsValidation,SIGNAL(accepted()),this,SLOT(addOperation()));
+
+    connect(ui->editIntituleMod,SIGNAL(textChanged(QString)),this,SLOT(activeVerificationMod()));
+    connect(ui->editNumeroMod,SIGNAL(textChanged(QString)),this,SLOT(activeVerificationMod()));
+    connect(ui->editMontantMod,SIGNAL(valueChanged(double)),this,SLOT(activeVerificationMod()));
+    connect(ui->boutonsValidationMod,SIGNAL(accepted()),this,SLOT(modOperation()));
+
+    connect(ui->tableauOperations,SIGNAL(cellClicked(int,int)),this,SLOT(activeModification()));
     connect(ui->buttonSupprimerOperation,SIGNAL(clicked()),this,SLOT(delOperation()));
-    // * Filtre opérations
+
+        // * Filtre opérations
     connect(ui->comboPeriode,SIGNAL(currentIndexChanged(int)),this,SLOT(refreshTableau()));
     connect(ui->comboNumeroRecherche,SIGNAL(currentTextChanged(QString const&)),this,SLOT(searchByNumero(QString const&)));
     connect(ui->comboIntituleRecherche,SIGNAL(currentTextChanged(QString const&)),this,SLOT(searchByIntitule(QString const&)));
-    // * Menu
+
+        // * Menu
     connect(ui->actionSauvegarder,SIGNAL(triggered()),this,SLOT(save()));
     connect(ui->action_propos,SIGNAL(triggered()),this,SLOT(apropos()));
-    // * Budgets
+    connect(ui->actionAide,SIGNAL(triggered()),this,SLOT(help()));
+
+        // * Budgets
     connect(ui->tableBudgetCategory,SIGNAL(cellClicked(int,int)),this,SLOT(refreshTableauBudget(int)));
 
     connect(ui->buttonBudgetCouleur,SIGNAL(clicked()),this,SLOT(chooseColor()));
@@ -145,15 +168,21 @@ Principale::Principale(Parameters& _parameters, QMainWindow *parent)
     connect(ui->comboBudgetOccurence,SIGNAL(currentIndexChanged(int)),this,SLOT(activeVerificationBudget()));
     connect(ui->buttonBudgetAjouter,SIGNAL(clicked()),this,SLOT(addBudget()));
 
+    connect(ui->buttonBudgetCouleurMod,SIGNAL(clicked()),this,SLOT(chooseColorMod()));
+    connect(ui->comboBudgetFrequenceMod,SIGNAL(currentIndexChanged(int)),this,SLOT(activeOccurenceMod()));
+    connect(ui->editBudgetMod,SIGNAL(textChanged(QString)),this,SLOT(activeVerificationBudgetMod()));
+    connect(ui->comboBudgetOccurenceMod,SIGNAL(currentIndexChanged(int)),this,SLOT(activeVerificationBudgetMod()));
+    connect(ui->buttonBudgetMod,SIGNAL(clicked()),this,SLOT(modBudget()));
+    connect(ui->buttonBudgetSupprimer,SIGNAL(clicked()),this,SLOT(delBudget()));
+
     connect(ui->tableBudget,SIGNAL(cellClicked(int,int)),ui->frameBudget,SLOT(focusOn(int)));
-    connect(ui->tableauOperations,SIGNAL(cellClicked(int,int)),this,SLOT(activeButSuppOp()));
     connect(ui->tableBudget,SIGNAL(cellClicked(int,int)),this,SLOT(modPrevision(int)));
     connect(ui->buttonBudgetPrevision,SIGNAL(clicked()),this,SLOT(setPrevision()));
 
-    connect(ui->buttonBudgetSupprimer,SIGNAL(clicked()),this,SLOT(supprimer()));
-    // * Redimensionnement
+        // * Redimensionnement
     connect(ui->tabWidget,SIGNAL(currentChanged(int)),this,SLOT(resize(int)));
-    // * Paramètres
+
+        // * Paramètres
     connect(ui->comboParDevise,SIGNAL(currentTextChanged(QString)),this,SLOT(changeDevise(QString)));
     connect(ui->checkParDevise,SIGNAL(stateChanged(int)),this,SLOT(changeDeviseVisible(int)));
     connect(ui->spinParMaxPoints,SIGNAL(valueChanged(int)),this,SLOT(changeMaxPoints(int)));
@@ -163,6 +192,11 @@ Principale::Principale(Parameters& _parameters, QMainWindow *parent)
     connect(ui->lineParArchive,SIGNAL(returnPressed()),this,SLOT(changeWriteRegistry()));
     connect(ui->buttonParPDF,SIGNAL(clicked()),this,SLOT(selectWritePDF()));
     connect(ui->lineParPDF,SIGNAL(returnPressed()),this,SLOT(changeWritePDF()));
+    connect(ui->radioParFormatDate1,SIGNAL(clicked()),this,SLOT(changeFormatDate()));
+    connect(ui->radioParFormatDate2,SIGNAL(clicked()),this,SLOT(changeFormatDate()));
+    connect(ui->radioParFormatDate3,SIGNAL(clicked()),this,SLOT(changeFormatDate()));
+    connect(ui->radioParFormatDate4,SIGNAL(clicked()),this,SLOT(changeFormatDate()));
+    connect(ui->radioParFormatDate5,SIGNAL(clicked()),this,SLOT(changeFormatDate()));
 
     //taille maximale
     this->showMaximized();
@@ -180,9 +214,38 @@ void Principale::activeVerification()
     );
 }
 
-void Principale::activeButSuppOp()
+void Principale::activeVerificationMod()
 {
+    ui->boutonsValidationMod->setDisabled(
+        ui->editMontantMod->value() == 0. ||
+        ui->editNumeroMod->text().isEmpty() ||
+        ui->editIntituleMod->text().isEmpty() ||
+        ui->comboBudgetMod->count() == 0
+    );
+}
+
+void Principale::activeModification()
+{
+    int __row = ui->tableauOperations->currentRow();
+    Operation* __select = ui->tableauOperations->item(__row,0)->data(1).value<Operation*>();
+    BudgetCategory* __bc = ui->tableauOperations->item(__row,0)->data(0).value<BudgetCategory*>();
+    ui->editDateMod->setDate(__select->getDate().toQDate());
+    ui->editNumeroMod->setText(__select->getReference());
+    QString __bc_text = (__bc->getType() == BudgetCategory::credit) ? "crédit" : "débit";
+    __bc_text = __bc->getSubject() + ", " + __bc_text;
+    ui->comboBudgetMod->setCurrentText(__bc_text);
+    ui->editMontantMod->setValue(__select->getValue());
+    ui->editIntituleMod->setText(__select->getSubject());
+    ui->editDescriptionMod->setText(__select->getDescription());
+
     ui->buttonSupprimerOperation->setEnabled(true);
+    ui->editDateMod->setEnabled(true);
+    ui->editNumeroMod->setEnabled(true);
+    ui->comboBudgetMod->setEnabled(true);
+    ui->editMontantMod->setEnabled(true);
+    ui->editIntituleMod->setEnabled(true);
+    ui->editDescriptionMod->setEnabled(true);
+    activeVerificationMod();
 }
 
 void Principale::addOperation()
@@ -221,6 +284,76 @@ void Principale::addOperation()
     setUnsaved();
 }
 
+void Principale::modOperation()
+{
+    int __row = ui->tableauOperations->currentRow();
+
+    QString __date = ui->tableauOperations->item(__row,1)->text();
+    QString __intitule = ui->tableauOperations->item(__row,3)->text();
+    if(QMessageBox::warning(this,"Validation requise","Cette action nécessite une validation:\n\t- Modifier l'opération \""+__intitule+"\" du "+__date, QMessageBox::StandardButton::Cancel | QMessageBox::StandardButton::Ok, QMessageBox::StandardButton::Cancel) != QMessageBox::StandardButton::Ok)
+        return;
+
+    Operation* __op = ui->tableauOperations->item(__row,0)->data(1).value<Operation*>();
+    if(__op == nullptr)
+    {
+        QMessageBox::critical(this,"Processus de modification d'une opération","Tentative de modification d'une opération avec data d'opération nulle");
+        return;
+    }
+    BudgetCategory* __bc = ui->tableauOperations->item(__row,0)->data(0).value<BudgetCategory*>();
+    if(__bc == nullptr)
+    {
+        QMessageBox::critical(this,"Processus de modification d'une opération","Tentative de modification d'une opération avec data de budget nulle");
+        return;
+    }
+
+    ui->buttonSupprimerOperation->setDisabled(true);
+    ui->editDateMod->setDisabled(true);
+    ui->editNumeroMod->setDisabled(true);
+    ui->comboBudgetMod->setDisabled(true);
+    ui->editMontantMod->setDisabled(true);
+    ui->editIntituleMod->setDisabled(true);
+    ui->editDescriptionMod->setDisabled(true);
+    ui->boutonsValidationMod->setDisabled(true);
+
+    double __montant = __op->getValue();
+    if(__bc->getType() == BudgetCategory::Type::credit)
+        __montant *= -1;
+    calendar.addBalance(__montant);
+
+    __bc->delOperation(__op);
+
+    unsigned __i = ui->comboBudgetMod->currentIndex();
+    int __d, __m, __y;
+    ui->editDateMod->date().getDate(&__y,&__m,&__d);
+    calendar[__i]->addOperation(
+                ui->editIntituleMod->text(),
+                ui->editNumeroMod->text(),
+                new Date(Date::Day(__d),Date::Month(__m),__y),
+                ui->editMontantMod->value(),
+                ui->editDescriptionMod->text());
+
+    //ajout dans les filtres
+
+    ui->comboNumeroRecherche->addItem(ui->editNumeroMod->text());
+    ui->comboIntituleRecherche->addItem(ui->editIntituleMod->text());
+
+    //nettoyage des champs
+
+    ui->editIntituleMod->setText("");
+    ui->editMontantMod->setValue(0.);
+    ui->editNumeroMod->setText("");
+    ui->comboBudgetMod->setCurrentIndex(0);
+    ui->editDateMod->setDate(QDate::currentDate());
+    ui->editDescriptionMod->setText("");
+
+    //fonctions communes
+
+    refreshTableau();
+    refreshTableauBudget(__i);
+    ui->frameBudget->update();
+    setUnsaved();
+}
+
 void Principale::delOperation()
 {
     int __row = ui->tableauOperations->currentRow();
@@ -230,14 +363,27 @@ void Principale::delOperation()
     if(QMessageBox::warning(this,"Validation requise","Cette action nécessite une validation:\n\t- Supprimer l'opération \""+__intitule+"\" du "+__date, QMessageBox::StandardButton::Cancel | QMessageBox::StandardButton::Ok, QMessageBox::StandardButton::Cancel) != QMessageBox::StandardButton::Ok)
         return;
 
-    ui->buttonSupprimerOperation->setDisabled(true);
-
     Operation* __op = ui->tableauOperations->item(__row,0)->data(1).value<Operation*>();
     if(__op == nullptr)
-        throw Exception("Tentative de suppression d'une opération avec data d'opération nulle");
+    {
+        QMessageBox::critical(this,"Processus de suppression d'une opération","Tentative de suppression d'une opération avec data d'opération nulle");
+        return;
+    }
     BudgetCategory* __bc = ui->tableauOperations->item(__row,0)->data(0).value<BudgetCategory*>();
     if(__bc == nullptr)
-        throw Exception("Tentative de suppression d'une opération avec data de budget nulle");
+    {
+        QMessageBox::critical(this,"Processus de suppression d'une opération","Tentative de suppression d'une opération avec data de budget nulle");
+        return;
+    }
+
+    ui->buttonSupprimerOperation->setDisabled(true);
+    ui->editDateMod->setDisabled(true);
+    ui->editNumeroMod->setDisabled(true);
+    ui->comboBudgetMod->setDisabled(true);
+    ui->editMontantMod->setDisabled(true);
+    ui->editIntituleMod->setDisabled(true);
+    ui->editDescriptionMod->setDisabled(true);
+    ui->boutonsValidationMod->setDisabled(true);
 
     double __montant = __op->getValue();
     if(__bc->getType() == BudgetCategory::Type::credit)
@@ -294,6 +440,16 @@ void Principale::activeVerificationBudget()
     );
 }
 
+void Principale::activeVerificationBudgetMod()
+{
+    ui->buttonBudgetMod->setDisabled(
+        //ui->editBudgetMod->text().isEmpty()||
+        ui->buttonBudgetCouleurMod->icon().isNull() /* ||
+        ui->comboBudgetFrequenceMod->currentIndex() == 0 ||
+        ui->comboBudgetOccurenceMod->currentIndex() == 0*/
+    );
+}
+
 void Principale::activeOccurence()
 {
     if(ui->comboBudgetFrequence->currentIndex() == 0)
@@ -339,6 +495,51 @@ void Principale::activeOccurence()
     ui->comboBudgetOccurence->setEnabled(true);
 }
 
+void Principale::activeOccurenceMod()
+{
+    if(ui->comboBudgetFrequenceMod->currentIndex() == 0)
+    {
+        ui->comboBudgetOccurenceMod->setCurrentIndex(0);
+        ui->comboBudgetOccurenceMod->setDisabled(true);
+        return;
+    }
+
+    ui->comboBudgetOccurenceMod->clear();
+    ui->comboBudgetOccurenceMod->addItem("Choisissez d'abord une fréquence",QVariant(0));
+
+    Frequency * __frequency = ui->comboBudgetFrequenceMod->currentData().value<Frequency*>();
+
+    if(__frequency->getRythm() == Frequency::WEEKLY)
+    {
+        unsigned __v = __frequency->getFrequency();
+        unsigned __i = 1;
+        for(;__i <= 26;__i++)
+        {
+            ui->comboBudgetOccurenceMod->addItem("sur "+QString::number(__i*__v)+" semaines",QVariant(__i*__v));
+        }
+    }
+    else if(__frequency->getRythm() == Frequency::MONTHLY)
+    {
+        unsigned __v = __frequency->getFrequency();
+        unsigned __i = 1;
+        for(;__i <= 24;__i++)
+        {
+            ui->comboBudgetOccurenceMod->addItem("sur "+QString::number(__i*__v)+" mois",QVariant(__i*__v));
+        }
+    }
+    else if(__frequency->getRythm() == Frequency::YEARLY)
+    {
+        unsigned __v = __frequency->getFrequency();
+        unsigned __i = 1;
+        for(;__i <= 15;__i++)
+        {
+            ui->comboBudgetOccurenceMod->addItem("sur "+QString::number(__i*__v)+" ans",QVariant(__i*__v));
+        }
+    }
+
+    ui->comboBudgetOccurenceMod->setEnabled(true);
+}
+
 void Principale::addBudget()
 {
     QDate __date = ui->editBudgetDate->date();
@@ -360,7 +561,6 @@ void Principale::addBudget()
     ui->comboBudgetOccurence->setDisabled(true);
     ui->comboBudgetFrequence->setCurrentIndex(0);
     ui->comboBudgetType->setCurrentIndex(0);
-    lastSelectionColor = QColor("black");
     ui->buttonBudgetCouleur->setIcon(QIcon());
     ui->buttonBudgetCouleur->setText("Sélectionner...");
     ui->editBudgetDate->setDate(QDate::currentDate());
@@ -369,6 +569,86 @@ void Principale::addBudget()
 
     refreshTableauBudgetCategory();
     refreshListBudget();
+    setUnsaved();
+}
+
+void Principale::modBudget()
+{
+    /*
+     * On n'autorise pas le changement de nom de catégorie
+     * car il s'agit d'une clé d'identification.
+     * La modification des règles temporelles (date, fréquence,
+     * occurence) est complexe à gérer et nécéssite une réflexe
+     * plus profonde pourêtre implémentée
+     */
+
+    QString __str_bc = ui->tableBudgetCategory->item(ui->tableBudgetCategory->currentRow(),1)->text();
+    if(QMessageBox::warning(this,"Validation requise","Cette action nécessite une validation:\n\t- Modifier la catégorie de budget \""+__str_bc+"\"", QMessageBox::StandardButton::Cancel | QMessageBox::StandardButton::Ok, QMessageBox::StandardButton::Cancel) != QMessageBox::StandardButton::Ok)
+        return;
+
+    BudgetCategory* __bc = calendar >> __str_bc;
+    if(__bc == nullptr){
+        QMessageBox::warning(this,"Processus de modification de budget","Il semblerait que le budget sélectionné ne corresponde à aucun budget en mémoire. Par conséquent aucune opération de modification ne sera menée.");
+        return;
+    }
+
+    BudgetCategory::Type __type = (ui->comboBudgetTypeMod->currentIndex() == 0) ? BudgetCategory::Type::credit : BudgetCategory::Type::debit;
+    __bc->setType(__type);
+
+    __bc->setColor(lastSelectionColor.rgb());
+
+
+    ui->editBudgetMod->clear();
+    ui->comboBudgetOccurenceMod->setCurrentIndex(0);
+    ui->comboBudgetFrequence->setCurrentIndex(0);
+    ui->comboBudgetTypeMod->setCurrentIndex(0);
+    ui->buttonBudgetCouleurMod->setIcon(QIcon());
+    ui->buttonBudgetCouleurMod->setText("Sélectionner...");
+    ui->editBudgetDateMod->setDate(QDate::currentDate());
+
+    ui->buttonBudgetSupprimer->setDisabled(true);
+    ui->buttonBudgetMod->setDisabled(true);
+    //ui->editBudgetMod->setDisabled(true);
+    //ui->comboBudgetOccurenceMod->setDisabled(true);
+    //ui->comboBudgetFrequence->setDisabled(true);
+    ui->comboBudgetTypeMod->setDisabled(true);
+    ui->buttonBudgetCouleurMod->setDisabled(true);
+    //ui->editBudgetDateMod->setDisabled(true);
+
+    refreshTableauBudgetCategory();
+    refreshListBudget();
+    refreshTableau();
+    setUnsaved();
+}
+
+void Principale::delBudget()
+{
+    QString __str_bc = ui->tableBudgetCategory->item(ui->tableBudgetCategory->currentRow(),1)->text();
+    if(QMessageBox::warning(this,"Validation requise","Cette action nécessite une validation:\n\t- Supprimer la catégorie de budget \""+__str_bc+"\"", QMessageBox::StandardButton::Cancel | QMessageBox::StandardButton::Ok, QMessageBox::StandardButton::Cancel) != QMessageBox::StandardButton::Ok)
+        return;
+
+    BudgetCategory* __bc = calendar >> __str_bc;
+    if(__bc == nullptr){
+        QMessageBox::warning(this,"Processus de suppression de budget","Il semblerait que le budget sélectionné ne corresponde à aucun budget en mémoire. Par conséquent aucune opération de suppression ne sera menée.");
+        return;
+    }
+    calendar.remove(__bc);
+
+    refreshTableauBudgetCategory();
+    if(calendar.getSize() > 0)
+    {
+        ui->frameBudget->setBudgetCategory(calendar[0]);
+        refreshTableauBudget(0);
+    }
+    else
+    {
+        ui->buttonBudgetSupprimer->setDisabled(true);
+        ui->frameBudget->setBudgetCategory(nullptr);
+        refreshTableauBudget(-1);
+    }
+    refreshListBudget();
+    refreshTableau();
+    ui->buttonSupprimerOperation->setDisabled(true);
     setUnsaved();
 }
 
@@ -381,6 +661,15 @@ void Principale::chooseColor()
     dialogColor->show();
 }
 
+void Principale::chooseColorMod()
+{
+    QColorDialog* dialogColor = new QColorDialog(lastSelectionColor,this);
+    dialogColor->setLocale(QLocale(QLocale::Language::French,QLocale::Country::France));
+    dialogColor->setModal(true);
+    connect(dialogColor,SIGNAL(colorSelected(const QColor &)),this,SLOT(getChosedColorMod(QColor const&)));
+    dialogColor->show();
+}
+
 void Principale::getChosedColor(QColor const& _color)
 {
     lastSelectionColor = _color;
@@ -389,6 +678,16 @@ void Principale::getChosedColor(QColor const& _color)
     ui->buttonBudgetCouleur->setIcon(QIcon(__pix));
     ui->buttonBudgetCouleur->setText("");
     activeVerificationBudget();
+}
+
+void Principale::getChosedColorMod(QColor const& _color)
+{
+    lastSelectionColor = _color;
+    QPixmap __pix(QSize(16,16));
+    __pix.fill(lastSelectionColor);
+    ui->buttonBudgetCouleurMod->setIcon(QIcon(__pix));
+    ui->buttonBudgetCouleurMod->setText("");
+    activeVerificationBudgetMod();
 }
 
 void Principale::modPrevision(int _row)
@@ -426,36 +725,7 @@ void Principale::setPrevision()
     setUnsaved();
 }
 
-void Principale::supprimer()
-{
-    QString __str_bc = ui->tableBudgetCategory->item(ui->tableBudgetCategory->currentRow(),1)->text();
-    if(QMessageBox::warning(this,"Validation requise","Cette action nécessite une validation:\n\t- Supprimer la catégorie de budget \""+__str_bc+"\"", QMessageBox::StandardButton::Cancel | QMessageBox::StandardButton::Ok, QMessageBox::StandardButton::Cancel) != QMessageBox::StandardButton::Ok)
-        return;
-
-    BudgetCategory* __bc = calendar >> __str_bc;
-    if(__bc == nullptr){
-        QMessageBox::warning(this,"Processus de suppression de budget","Il semblerait que le budget sélectionné ne corresponde à aucun budget en mémoire. Par conséquent aucune opération de suppression ne sera menée.");
-        return;
-    }
-    calendar.remove(__bc);
-
-    refreshTableauBudgetCategory();
-    if(calendar.getSize() > 0)
-    {
-        ui->frameBudget->setBudgetCategory(calendar[0]);
-        refreshTableauBudget(0);
-    }
-    else
-    {
-        ui->buttonBudgetSupprimer->setDisabled(true);
-        ui->frameBudget->setBudgetCategory(nullptr);
-        refreshTableauBudget(-1);
-    }
-    refreshListBudget();
-    refreshTableau();
-    ui->buttonSupprimerOperation->setDisabled(ui->tableauOperations->rowCount() == 0);
-    setUnsaved();
-}
+// =PARAMETERS===========================================================================
 
 void Principale::changeDevise(QString _devise)
 {
@@ -487,6 +757,41 @@ void Principale::changeDeviseVisible(int _visible)
     {
         ui->tableBudgetCategory->setCurrentCell(0,0);
         refreshTableauBudget(0);
+    }
+    setUnsaved();
+}
+
+void Principale::changeFormatDate()
+{
+    if(ui->radioParFormatDate1->isChecked())
+    {
+        parameters.changeFormatDate("dd mmmm yyyy");
+    }
+    else if(ui->radioParFormatDate2->isChecked())
+    {
+        parameters.changeFormatDate("dd mmm yyyy");
+    }
+    else if(ui->radioParFormatDate3->isChecked())
+    {
+        parameters.changeFormatDate("dd/mm/yyyy");
+    }
+    else if(ui->radioParFormatDate4->isChecked())
+    {
+        parameters.changeFormatDate("mm/dd/yyyy");
+    }
+    else if(ui->radioParFormatDate5->isChecked())
+    {
+        parameters.changeFormatDate("yyyy/mm/dd");
+    }
+
+    if(parameters.getDeviseVisible())
+    {
+        refreshTableau();
+        if(calendar.getSize() > 0)
+        {
+            ui->tableBudgetCategory->setCurrentCell(0,0);
+            refreshTableauBudget(0);
+        }
     }
     setUnsaved();
 }
@@ -571,6 +876,8 @@ void Principale::refreshListBudget()
 {
     ui->comboBudget->clear();
     ui->comboBudget->setIconSize(QSize(16,16));
+    ui->comboBudgetMod->clear();
+    ui->comboBudgetMod->setIconSize(QSize(16,16));
     unsigned __i = 0;
     for(;__i < calendar.getSize();__i++)
     {
@@ -582,6 +889,7 @@ void Principale::refreshListBudget()
             __type = ", débit";
 
         ui->comboBudget->addItem(QIcon(__pix),calendar[__i]->getSubject() + __type);
+        ui->comboBudgetMod->addItem(QIcon(__pix),calendar[__i]->getSubject() + __type);
     }
 }
 
@@ -636,7 +944,7 @@ void Principale::refreshTableau(bool _init_recherches)
 
                     //date
 
-                    QTableWidgetItem* __twi_date = new QTableWidgetItem(__o->getDate().toString());
+                    QTableWidgetItem* __twi_date = new QTableWidgetItem(__o->getDate().toString(parameters.getFormatDate()));
                         __twi_date->setTextAlignment(Qt::AlignCenter);
                         __twi_date->setFlags(__twi_date->flags()^ Qt::ItemIsEditable);
                         __twi_date->setToolTip(__o->getDescription());
@@ -768,6 +1076,7 @@ void Principale::refreshTableauBudgetCategory()
         QTableWidgetItem* __twi_color = new QTableWidgetItem();
             __twi_color->setBackground(QBrush(QColor(calendar[__i]->getColor())));
             __twi_color->setFlags(__twi_color->flags()^ Qt::ItemIsEditable);
+            __twi_color->setData(0,QVariant::fromValue<BudgetCategory*>(calendar[__i]));
             ui->tableBudgetCategory->setItem(__i,0,__twi_color);
 
         //catégorie
@@ -835,8 +1144,8 @@ void Principale::refreshTableauBudget(int _category)
         //date de début
 
         QString __date;
-        if(__i > 0) __date = __bc.getDate(__i-1).toString();
-        else __date = (__bc.getDate() - __bc.getFrequency()).toString();
+        if(__i > 0) __date = __bc.getDate(__i-1).toString(parameters.getFormatDate());
+        else __date = (__bc.getDate() - __bc.getFrequency()).toString(parameters.getFormatDate());
         QTableWidgetItem* __twi_dd = new QTableWidgetItem(__date);
             __twi_dd->setTextAlignment(Qt::AlignCenter);
             __twi_dd->setFlags(__twi_dd->flags()^ Qt::ItemIsEditable);
@@ -844,7 +1153,7 @@ void Principale::refreshTableauBudget(int _category)
 
         //date de fin
 
-        QTableWidgetItem* __twi_df = new QTableWidgetItem(__bc.getDate(__i).toString());
+        QTableWidgetItem* __twi_df = new QTableWidgetItem(__bc.getDate(__i).toString(parameters.getFormatDate()));
             __twi_df->setTextAlignment(Qt::AlignCenter);
             __twi_df->setFlags(__twi_df->flags()^ Qt::ItemIsEditable);
             ui->tableBudget->setItem(__i,1,__twi_df);
@@ -880,7 +1189,31 @@ void Principale::refreshTableauBudget(int _category)
     ui->groupBudgetOccurences->setVisible(false);
 
     if(ui->tableBudgetCategory->currentItem() != nullptr)
+    {
+        int __row = ui->tableBudgetCategory->currentRow();
+        BudgetCategory* __select = ui->tableBudgetCategory->item(__row,0)->data(0).value<BudgetCategory*>();
+
+        if(__select == nullptr) return;
+
+        ui->editBudgetMod->setText(__select->getSubject());
+        ui->comboBudgetTypeMod->setCurrentIndex((__select->getType() == BudgetCategory::credit) ? 0 : 1);
+        QPixmap __pix(QSize(16,16));
+        __pix.fill(__select->getColor());
+        ui->buttonBudgetCouleurMod->setIcon(QIcon(__pix));
+        ui->buttonBudgetCouleurMod->setText("");
+
+        ui->editBudgetDateMod->setDate(__select->getDate().toQDate());
+
         ui->buttonBudgetSupprimer->setEnabled(true);
+        //ui->editBudgetMod->setEnabled(true);
+        //ui->comboBudgetOccurenceMod->setEnabled(true);
+        //ui->comboBudgetFrequence->setEnabled(true);
+        ui->comboBudgetTypeMod->setEnabled(true);
+        ui->buttonBudgetCouleurMod->setEnabled(true);
+        //ui->editBudgetDateMod->setEnabled(true);
+
+        activeVerificationBudgetMod();
+    }
 
     ui->frameBudget->focusOn(0);
 }
@@ -898,7 +1231,8 @@ void Principale::save()
     QFile fichier(parameters.getFileSave());
     if(!fichier.open(QIODevice::WriteOnly)){
         fichier.close();
-        throw Exception("impossible d'ouvrir le fichier");
+        QMessageBox::warning(this,"Processus de sauvegarde","L'application ne peut accéder en mode WRITE_ONLY au fichier de sauvegarde. Vérifier que l'application n'est pas installée sur votre ordinateur dans un répertoire nécessitant les droits d'administrateur pour modifier un fichier.");
+        return;
     }
     QXmlStreamWriter* xml = new QXmlStreamWriter(&fichier);
 
@@ -937,6 +1271,17 @@ void Principale::apropos()
 {
     QMessageBox::information(this,"À propos",
         parameters.getAppLongName()+"\n\nVersion : "+parameters.getAppVersion()+"\nAuthor: Jérémy Godde\nMade with Qt Creator 4.12.3 based on Qt 5.15\nLicense : GNU GPL 3 ; This is free software, and you are welcome to redistribute it under certain conditions\n\nCopyright © 2020 • Regulation by European and French law");
+}
+
+void Principale::help()
+{
+    if(QMessageBox::question(this,"Aide","Autorisez-vous "+parameters.getAppLongName()+" "+parameters.getAppVersion()+" a ouvrir la page d'aide dans votre navigateur par défaut ? La procédure prendra quelques secondes.",QMessageBox::StandardButton::Yes | QMessageBox::StandardButton::No, QMessageBox::StandardButton::No))
+    {
+        if(!parameters.openHelp())
+        {
+            QMessageBox::critical(this,"Aide","Impossible d'ouvrir votre navigateur internet par défaut pour accéder à la page d'aide. Pour chercher de l'aide manuellement vous pouvez vous rendre sur https://github.com/JeremyGodde/Lukos");
+        }
+    }
 }
 
 // ======================================================================================

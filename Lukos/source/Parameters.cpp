@@ -1,32 +1,24 @@
-/* =======================================================================
-    Lukos Budgeting Application
-    Copyright (C) 2020 Jérémy Godde
+/**
+    @copyright Lukos Budgeting Application copyright © 2020 Jérémy Godde
 
+    @par License :
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
-
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
-
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
-======================================================================= */
+*/
 
 #include "../header/Parameters.h"
 
 Parameters::Parameters()
     : QObject()
 {
-try{
-
-    app_name = "Lukos";
-    app_long_name = "Lukos Budgeting Application";
-    app_version = "Abricot (0.2)";
-
     QFile fichier(cfg_save);
     if(!fichier.open(QIODevice::ReadOnly)){
 
@@ -44,6 +36,7 @@ try{
         devise = "€";
         devise_visible = false;
         graphics_max_points = 6;
+        format_date = "dd mmmm yyyy";
 
         QString const REGISTRY = "registry",
                       SAVE = "save",
@@ -84,7 +77,6 @@ try{
         xml->readNextStartElement();
         if(xml->qualifiedName() != "Version")
             throw Exception("Fichier corrompu : Version était attendu, mais '"+xml->qualifiedName()+"' a été rencontré");
-
         QString __version = xml->readElementText();
         if(__version < app_version &&
             QMessageBox::warning(nullptr,"Chargement de la configuration",
@@ -141,6 +133,15 @@ try{
         if(xml->qualifiedName() != "GraphicsMaxPoints")
             throw Exception("Fichier corrompu : GraphicsMaxPoints était attendu, mais '"+xml->qualifiedName()+"' a été rencontré");
         graphics_max_points = xml->readElementText().toUInt();
+
+        if(__version >= "Abricot (0.2.2)"){
+            // format
+
+            xml->readNextStartElement();
+            if(xml->qualifiedName() != "FormatDate")
+                throw Exception("Fichier corrompu : FormatDate était attendu, mais '"+xml->qualifiedName()+"' a été rencontré");
+            format_date = xml->readElementText();
+        }// version Abricot 0.2.2
     }
     catch(Exception &e)
     {
@@ -151,16 +152,10 @@ try{
     }
     fichier.close();
 }
-catch(Exception& e)
+
+bool Parameters::openHelp() const
 {
-    std::cerr << e.getStdString() << std::endl;
-    abort();
-}
-catch(std::exception& e)
-{
-    std::cerr << e.what() << std::endl;
-    abort();
-}
+    return QDesktopServices::openUrl(url_help);
 }
 
 QString const& Parameters::getAppName() const
@@ -187,6 +182,7 @@ bool Parameters::getDeviseVisible() const
 {
     return devise_visible;
 }
+
 QString const& Parameters::getDirPDF() const
 {
     return dir_pdf;
@@ -200,6 +196,11 @@ QString const& Parameters::getDirRegistry() const
 QString const& Parameters::getFileSave() const
 {
     return file_save;
+}
+
+QString const& Parameters::getFormatDate() const
+{
+    return format_date;
 }
 
 unsigned Parameters::getGraphicsMaxPoints() const
@@ -231,6 +232,7 @@ void Parameters::save()
     xml->writeTextElement("Devise",devise);
     xml->writeTextElement("DeviseVisible",QString::number(devise_visible));
     xml->writeTextElement("GraphicsMaxPoints",QString::number(graphics_max_points));
+    xml->writeTextElement("FormatDate",format_date);
 
     xml->writeEndElement();
     xml->writeEndDocument();
