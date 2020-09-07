@@ -19,17 +19,18 @@ Pour toute aide : [le Wiki](https://github.com/JeremyGodde/Lukos/wiki/Aide)
   - Abricot 0.X
       - 0.1 version non-déployable de développement
       - 0.2 version déployable d'essai basique
-          - architecture du budget
-          - système de sauvegarde
-          - système de paramètres
-          - système d'installation basique
-          - fonctionnalités d'ajout et de suppression
+          - architecture du budget :white_check_mark:
+          - système de sauvegarde :white_check_mark:
+          - système de paramètres :white_check_mark:
+          - système d'installation basique :white_check_mark:
+          - fonctionnalités d'ajout et de suppression :white_check_mark:
       - 0.3 version déployable d'essai intermédiaire (**ACTUELLE**)
-          - fonctionnalités de modification
-          - accès à l'aide
-          - mise à jour de la documentation
+          - fonctionnalités de modification :white_check_mark:
+          - accès à l'aide :white_check_mark:
+          - mise à jour de la documentation :white_check_mark:
       - 0.4 version déployable d'essai avancée
           - fonction d'archivage
-          - fonction d'exportation de bilans personnalisables
-          - optimisation de l'architecture
+          - fonction d'exportation de bilans personnalisables :white_check_mark:
+          - optimisation de l'architecture :white_check_mark:
           - ajout à l'architecture d'opérations prévisionnelles
+          - fonctionnalités de backup automatique lors d'upgrade de version des fichiers de sauvegarde :white_check_mark:
