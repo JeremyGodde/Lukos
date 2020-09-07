@@ -1,0 +1,6 @@
+.gitignore
+README.md
+*.pdf
+*.html
+*.css
+*.js
