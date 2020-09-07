@@ -26,8 +26,10 @@ Pour toute aide : [le Wiki](https://github.com/JeremyGodde/Lukos/wiki/Aide)
           - fonctionnalités d'ajout et de suppression
       - 0.3 version déployable d'essai intermédiaire (**ACTUELLE**)
           - fonctionnalités de modification
-          - aide intégrée
+          - accès à l'aide
           - mise à jour de la documentation
       - 0.4 version déployable d'essai avancée
           - fonction d'archivage
-          - fonction d'exportation de rapport
+          - fonction d'exportation de bilans personnalisables
+          - optimisation de l'architecture
+          - ajout à l'architecture d'opérations prévisionnelles
