@@ -8,13 +8,13 @@
 Lukos Budgeting Application
 Copyright (c) 2020 • Jérémy Godde
 
-## Aide
+# Présentation
 
-Pour installer l'application : [Aide à l'installation](https://github.com/JeremyGodde/Lukos/wiki/Installation)
+Lukos est un logiciel libre de budgétisation. Il permet de tenir une comptabilité simple, de gérer plusieurs budgets au rythme parfois différent (mensuels, trimestriels, hebdomadaires) et d'avoir un suivi rapide et individuel de ces budgets au travers de graphiques. Lukos permet également d'éditer des bilans personnalisables synthétisant les différents budgets gérés et les opérations comptables effectuées.
 
-Pour toute aide : [le Wiki](https://github.com/JeremyGodde/Lukos/wiki/Aide)
+# [Aide](https://github.com/JeremyGodde/Lukos/wiki)
 
-## Liste des versions
+# Liste des versions
 
   - Abricot 0.X
       - 0.1 version non-déployable de développement
