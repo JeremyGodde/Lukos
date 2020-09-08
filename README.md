@@ -34,3 +34,4 @@ Lukos est un logiciel libre de budgétisation. Il permet de tenir une comptabili
           - :white_check_mark: optimisation de l'architecture
           - :x: ajout à l'architecture d'opérations prévisionnelles
           - :white_check_mark: fonctionnalités de backup automatique lors d'upgrade de version des fichiers de sauvegarde
+          - :x: rendre les BudgetCategory responsable de la peinture des graphiques
